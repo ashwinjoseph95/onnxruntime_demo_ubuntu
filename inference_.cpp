@@ -1,10 +1,10 @@
 #include <onnxruntime_cxx_api.h>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/dnn.hpp>
+
 int main()
 {
-const bool use_cuda = false;
-const std::string fn_image = "cat.jpeg";
+
+const std::string fn_image = "cat.jpg";
 const std::string fn_model = "super_resolution.onnx";
 //environment anf options
 
@@ -31,7 +31,7 @@ cv::resize(image, image, cv::Size(224,224), cv::INTER_LINEAR);
 //std::cout<<"image.rows"<<image.rows<<std::endl;
 //std::cout<<"image.cols"<<image.cols<<std::endl;
 
-CV_Assert(image.type() == CV_8UC1);
+//CV_Assert(image.type() == CV_8UC1);
 
 //CV_Assert(image.rows == input_dims[2]&& image.cols==input_dims[3]);
 cv::Mat blob = cv::dnn::blobFromImage(image,1.0/255.0);
