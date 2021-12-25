@@ -28,26 +28,16 @@ std::vector<const char*> output_names {output_name};
 
 auto image = imread(fn_image, cv::IMREAD_GRAYSCALE);
 cv::resize(image, image, cv::Size(224,224), cv::INTER_LINEAR);
-//std::cout<<"image.rows"<<image.rows<<std::endl;
-//std::cout<<"image.cols"<<image.cols<<std::endl;
 
-//CV_Assert(image.type() == CV_8UC1);
-
-//CV_Assert(image.rows == input_dims[2]&& image.cols==input_dims[3]);
 cv::Mat blob = cv::dnn::blobFromImage(image,1.0/255.0);
 cv::Mat output(output_dims[2],output_dims[3],CV_32FC1);
-std::cout<<"output_dims[2]"<<output_dims[2]<<std::endl;
-std::cout<<"output_dims[3]"<<output_dims[3]<<std::endl;
-std::cout<<"CV_32FC1"<<CV_32FC1<<std::endl;
+
 auto memory_info = Ort::MemoryInfo::CreateCpu(
    OrtAllocatorType::OrtArenaAllocator, OrtMemType::OrtMemTypeDefault);
 std::vector<Ort::Value> input_tensors, output_tensors;
 
 input_tensors.emplace_back(Ort::Value::CreateTensor<float>(memory_info,blob.ptr<float>(),blob.total(),input_dims.data(), input_dims.size()));
 output_tensors.emplace_back(Ort::Value::CreateTensor<float>(memory_info,output.ptr<float>(),output.total(),output_dims.data(), output_dims.size()));
-
-std::cout<<"input_names.data()"<<input_names.data()<<std::endl;
-std::cout<<"output_names.data()"<<output_names.data()<<std::endl;
 
 //inference
     session.Run(Ort::RunOptions{ nullptr }, input_names.data(), input_tensors.data(),1,output_names.data(),output_tensors.data(),1);
